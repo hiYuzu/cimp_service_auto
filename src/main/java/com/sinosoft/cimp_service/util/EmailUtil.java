@@ -27,9 +27,14 @@ public class EmailUtil {
      */
     private static final String SENDER = "88999747@qq.com";
     /**
-     * 接收者
+     * 接收者（赵晓阳）
      */
-    private static final String RECIPIENT = "pomelo.yuzu1997@gmail.com";
+    private static final String RECIPIENT_1 = "pomelo.yuzu1997@gmail.com";
+    /**
+     * 接收者（王明耀）
+     */
+    private static final String RECIPIENT_2 = "595004780@qq.com";
+
     /**
      * 正文编码方式
      */
@@ -68,7 +73,8 @@ public class EmailUtil {
 
         MimeMessage message = new MimeMessage(session);
         message.setFrom(new InternetAddress(SENDER));
-        message.setRecipient(Message.RecipientType.TO, new InternetAddress(RECIPIENT));
+        message.addRecipient(Message.RecipientType.TO, new InternetAddress(RECIPIENT_1));
+        message.addRecipient(Message.RecipientType.TO, new InternetAddress(RECIPIENT_2));
         message.setSubject(subject);
         message.setContent(content, CONTENT_TYPE);
 

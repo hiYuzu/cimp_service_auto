@@ -44,6 +44,13 @@ public class CimpTask {
             LOG.info("初始化...");
             contentCimp = content;
             first = false;
+            try {
+                EmailUtil.send("Info", "网站监控服务已启动，这是一封通知邮件。");
+            } catch (MessagingException | GeneralSecurityException e) {
+                e.printStackTrace();
+                LOG.error("邮件发送抛出 " + e.getClass().getName() + " 异常：" + e.getMessage());
+                this.setActive(false);
+            }
             return;
         }
         if (!contentCimp.equals(content)) {
