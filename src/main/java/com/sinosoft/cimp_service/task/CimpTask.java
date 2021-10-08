@@ -23,6 +23,7 @@ public class CimpTask {
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     private String contentCimp;
+    private String contentPortal;
     Map<String, Object> params;
     private boolean first;
     private boolean active;
@@ -40,9 +41,11 @@ public class CimpTask {
             return;
         }
         String content = HttpUtil.get("https://credit.jdzx.net.cn/cimp/login.do");
+        String content2 = HttpUtil.get("https://credit.jdzx.net.cn/portal/");
         if (first) {
             LOG.info("初始化...");
             contentCimp = content;
+            contentPortal = content2;
             first = false;
             try {
                 EmailUtil.send("Info", "网站监控服务已启动，这是一封通知邮件。");
@@ -56,7 +59,18 @@ public class CimpTask {
         if (!contentCimp.equals(content)) {
             try {
                 EmailUtil.send("Warning", "请检查链接<a>https://credit.jdzx.net.cn/cimp</a>是否正常");
-                LOG.warn("比对出现不同，请检查链接是否正常。");
+                LOG.warn("比对出现不同，请检查cimp是否正常。");
+            } catch (MessagingException | GeneralSecurityException e) {
+                e.printStackTrace();
+                LOG.error("邮件发送抛出 " + e.getClass().getName() + " 异常：" + e.getMessage());
+            } finally {
+                this.setActive(false);
+                LOG.warn("检查功能已关闭，请手动重启。");
+            }
+        } else if(!contentPortal.equals(content2)) {
+            try {
+                EmailUtil.send("Warning", "请检查链接<a>https://credit.jdzx.net.cn/portal/</a>是否正常");
+                LOG.warn("比对出现不同，请检查portal是否正常。");
             } catch (MessagingException | GeneralSecurityException e) {
                 e.printStackTrace();
                 LOG.error("邮件发送抛出 " + e.getClass().getName() + " 异常：" + e.getMessage());
