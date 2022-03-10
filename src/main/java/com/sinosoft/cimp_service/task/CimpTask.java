@@ -35,7 +35,7 @@ public class CimpTask {
         active = true;
     }
 
-    @Scheduled(cron = "0 */10 * * * ?")
+//    @Scheduled(cron = "0 */10 * * * ?")
     public void getCimp() {
         if (!isActive()) {
             return;
